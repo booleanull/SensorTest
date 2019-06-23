@@ -11,15 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.boolenull.sensortest.R
+import com.boolenull.sensortest.utils.MySensorEventListener
+import com.boolenull.sensortest.utils.maxPoint
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import kotlinx.android.synthetic.main.fragment_light.*
 import kotlinx.android.synthetic.main.fragment_light.view.*
 
-
-class LightFragment : Fragment(), SensorEventListener {
-
-    val max = 100
+class LightFragment: Fragment(), MySensorEventListener {
 
     lateinit var sensorManager: SensorManager
     var sensor: Sensor? = null
@@ -47,14 +46,11 @@ class LightFragment : Fragment(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        if (points.size > max) points.clear()
-        view!!.tv.text = getString(R.string.light) + " " + event!!.values[0]
+        if (points.size > maxPoint) points.clear()
+        view!!.tv.text = getString(R.string.light, event!!.values[0])
         points.add(DataPoint(points.size.toDouble(), event.values[0].toDouble()))
         val series = LineGraphSeries<DataPoint>(points.toTypedArray())
         graph.removeAllSeries()
         graph.addSeries(series)
-    }
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
     }
 }

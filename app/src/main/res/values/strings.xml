@@ -3,10 +3,10 @@
     <string name="find">Найдено: %1$d</string>
     <string name="indef">Распознано: %1$d</string>
     <string name="clear">Очистить</string>
-    <string name="light">Количество света:</string>
-    <string name="X">Координата X:</string>
-    <string name="Y">Координата Y:</string>
-    <string name="Z">Координата Z:</string>
+    <string name="light">Количество света: %1$d</string>
+    <string name="X">Координата X: %1$d</string>
+    <string name="Y">Координата Y: %1$d</string>
+    <string name="Z">Координата Z: %1$d</string>
     <string name="proxity">Расстояние:</string>
     <string name="humi">Влажность:</string>
     <string name="temp">Температура:</string>

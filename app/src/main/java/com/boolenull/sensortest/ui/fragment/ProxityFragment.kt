@@ -11,14 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.boolenull.sensortest.R
+import com.boolenull.sensortest.utils.MySensorEventListener
+import com.boolenull.sensortest.utils.maxPoint
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import kotlinx.android.synthetic.main.fragment_acceler.*
 import kotlinx.android.synthetic.main.fragment_light.view.*
 
-class ProxityFragment : Fragment(), SensorEventListener {
-
-    val max = 100
+class ProxityFragment: Fragment(), MySensorEventListener {
 
     lateinit var sensorManager: SensorManager
     var sensor: Sensor? = null
@@ -46,12 +46,8 @@ class ProxityFragment : Fragment(), SensorEventListener {
         sensorManager.unregisterListener(this)
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-    }
-
     override fun onSensorChanged(event: SensorEvent?) {
-        if (point.size > max) {
+        if (point.size > maxPoint) {
             point.clear()
         }
 

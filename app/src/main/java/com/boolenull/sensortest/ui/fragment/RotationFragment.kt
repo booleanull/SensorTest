@@ -12,14 +12,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.boolenull.sensortest.R
+import com.boolenull.sensortest.utils.MySensorEventListener
+import com.boolenull.sensortest.utils.maxPoint
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import kotlinx.android.synthetic.main.fragment_acceler.*
 import kotlinx.android.synthetic.main.fragment_acceler.view.*
 
-class RotationFragment : Fragment(), SensorEventListener {
-
-    val max = 100
+class RotationFragment: Fragment(), MySensorEventListener {
 
     lateinit var sensorManager: SensorManager
     var sensor: Sensor? = null
@@ -49,12 +49,8 @@ class RotationFragment : Fragment(), SensorEventListener {
         sensorManager.unregisterListener(this)
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-    }
-
     override fun onSensorChanged(event: SensorEvent?) {
-        if (pointx.size > max) {
+        if (pointx.size > maxPoint) {
             pointx.clear()
             pointy.clear()
             pointz.clear()
@@ -84,8 +80,8 @@ class RotationFragment : Fragment(), SensorEventListener {
         seriesy.title = "Y"
         seriesz.title = "Z"
 
-        graph.getLegendRenderer().setVisible(true);
-        graph.getLegendRenderer().setTextSize(12f);
+        graph.legendRenderer.isVisible = true
+        graph.legendRenderer.textSize = 12f
 
         graph.addSeries(seriesx)
         graph.addSeries(seriesy)

@@ -10,6 +10,7 @@ import android.net.NetworkInfo
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import android.util.Size
 import com.boolenull.sensortest.R
 import com.boolenull.sensortest.model.EnumSensor
 import com.boolenull.sensortest.model.MySensor
@@ -102,6 +103,7 @@ class SensorRepository(val context: Context): ISensorRepository {
             cameraId = i
             characteristics = cManager.getCameraCharacteristics(cameraId)
             camera = characteristics.get(CameraCharacteristics.LENS_FACING)
+                    ?: return null
             if (camera == CameraCharacteristics.LENS_FACING_FRONT && !type) {
                 return cameraId
             }
@@ -114,7 +116,7 @@ class SensorRepository(val context: Context): ISensorRepository {
 
     private fun getPixelCamera(cameraManager: CameraManager, camera: String): Int {
         val characteristics = cameraManager.getCameraCharacteristics(camera)
-        val size = characteristics.get(CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE)
+        val size = characteristics.get(CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE) ?: Size(0, 0)
         return size.width * size.height / 1024000 + 1
     }
 

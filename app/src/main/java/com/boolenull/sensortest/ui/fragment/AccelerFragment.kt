@@ -12,14 +12,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.boolenull.sensortest.R
+import com.boolenull.sensortest.utils.MySensorEventListener
+import com.boolenull.sensortest.utils.maxPoint
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import kotlinx.android.synthetic.main.fragment_acceler.*
 import kotlinx.android.synthetic.main.fragment_acceler.view.*
 
-class AccelerFragment : Fragment(), SensorEventListener {
-
-    val max = 100
+class AccelerFragment : Fragment(), MySensorEventListener {
 
     lateinit var sensorManager: SensorManager
     var sensor: Sensor? = null
@@ -49,70 +49,59 @@ class AccelerFragment : Fragment(), SensorEventListener {
         sensorManager.unregisterListener(this)
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-    }
-
     override fun onSensorChanged(event: SensorEvent?) {
-        if (pointx.size > max) {
+        if (pointx.size > maxPoint) {
             pointx.clear()
             pointy.clear()
             pointz.clear()
         }
 
-        view!!.tvX.text = getString(R.string.X) + " " + event!!.values[0]
-        view!!.tvY.text = getString(R.string.Y) + " " + event!!.values[1]
-        view!!.tvZ.text = getString(R.string.Z) + " " + event!!.values[2]
+        event?.let {
+            view!!.tvX.text = getString(R.string.X, it.values[0])
+            view!!.tvY.text = getString(R.string.Y, it.values[1])
+            view!!.tvZ.text = getString(R.string.Z, it.values[2])
 
-        if (event!!.values[0].toInt() == 0) {
-            view!!.tvXD.text = getString(R.string.accecenter)
-        } else if (event.values[0] < 0) {
-            view!!.tvXD.text = getString(R.string.acceright)
-        } else {
-            view!!.tvXD.text = getString(R.string.acceleft)
+            when {
+                it.values[0].toInt() == 0 -> view!!.tvXD.text = getString(R.string.accecenter)
+                it.values[0] < 0 -> view!!.tvXD.text = getString(R.string.acceright)
+                else -> view!!.tvXD.text = getString(R.string.acceleft)
+            }
+
+            when {
+                it.values[1].toInt() == 0 -> view!!.tvYD.text = getString(R.string.accecenter)
+                it.values[1] < 0 -> view!!.tvYD.text = getString(R.string.acceydown)
+                else -> view!!.tvYD.text = getString(R.string.acceyup)
+            }
+
+            when {
+                it.values[2].toInt() == 0 -> view!!.tvZD.text = getString(R.string.accecenter)
+                it.values[2] < 0 -> view!!.tvZD.text = getString(R.string.accezup)
+                else -> view!!.tvZD.text = getString(R.string.accezdown)
+            }
+
+            pointx.add(DataPoint(pointx.size.toDouble(), it.values[0].toDouble()))
+            pointy.add(DataPoint(pointy.size.toDouble(), it.values[1].toDouble()))
+            pointz.add(DataPoint(pointz.size.toDouble(), it.values[2].toDouble()))
+
+            val seriesx = LineGraphSeries<DataPoint>(pointx.toTypedArray())
+            val seriesy = LineGraphSeries<DataPoint>(pointy.toTypedArray())
+            val seriesz = LineGraphSeries<DataPoint>(pointz.toTypedArray())
+
+            graph.removeAllSeries()
+
+            seriesx.color = Color.GREEN
+            seriesy.color = Color.RED
+
+            seriesx.title = "X"
+            seriesy.title = "Y"
+            seriesz.title = "Z"
+
+            graph.legendRenderer.isVisible = true
+            graph.legendRenderer.textSize = 12f
+
+            graph.addSeries(seriesx)
+            graph.addSeries(seriesy)
+            graph.addSeries(seriesz)
         }
-
-        if (event!!.values[1].toInt() == 0) {
-            view!!.tvYD.text = getString(R.string.accecenter)
-        } else if (event.values[1] < 0) {
-            view!!.tvYD.text = getString(R.string.acceydown)
-        } else {
-            view!!.tvYD.text = getString(R.string.acceyup)
-        }
-
-        if (event!!.values[2].toInt() == 0) {
-            view!!.tvZD.text = getString(R.string.accecenter)
-        } else if (event.values[2] < 0) {
-            view!!.tvZD.text = getString(R.string.accezup)
-        } else {
-            view!!.tvZD.text = getString(R.string.accezdown)
-        }
-
-        //val df = DecimalFormat("#.###")
-        //df.roundingMode = RoundingMode.CEILING
-
-        pointx.add(DataPoint(pointx.size.toDouble(), event.values[0].toDouble()))
-        pointy.add(DataPoint(pointy.size.toDouble(), event.values[1].toDouble()))
-        pointz.add(DataPoint(pointz.size.toDouble(), event.values[2].toDouble()))
-
-        val seriesx = LineGraphSeries<DataPoint>(pointx.toTypedArray())
-        val seriesy = LineGraphSeries<DataPoint>(pointy.toTypedArray())
-        val seriesz = LineGraphSeries<DataPoint>(pointz.toTypedArray())
-
-        graph.removeAllSeries()
-
-        seriesx.color = Color.GREEN
-        seriesy.color = Color.RED
-
-        seriesx.title = "X"
-        seriesy.title = "Y"
-        seriesz.title = "Z"
-
-        graph.getLegendRenderer().setVisible(true);
-        graph.getLegendRenderer().setTextSize(12f);
-
-        graph.addSeries(seriesx)
-        graph.addSeries(seriesy)
-        graph.addSeries(seriesz)
     }
 }
