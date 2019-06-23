@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.boolenull.sensortest.ui.MainActivity
 import com.boolenull.sensortest.R
+import com.boolenull.sensortest.model.EnumSensor
 import com.boolenull.sensortest.model.MySensor
 import com.boolenull.sensortest.ui.fragment.*
 import kotlinx.android.synthetic.main.layout_sensor.view.*
@@ -23,14 +24,12 @@ class SensorAdapter(private val layoutInflater: LayoutInflater, private val item
     }
 
     override fun onBindViewHolder(holder: SensorHolder, p1: Int) {
-        if (items[holder.adapterPosition].id in 1000..1002) {
+        if (items[holder.adapterPosition].id in EnumSensor.values().map { it.id }) {
             holder.more.textSize = 14F
             holder.more.setTextColor(ContextCompat.getColor(layoutInflater.context, R.color.colorBlack))
             holder.card.foreground = null
         } else {
-            // More
             setMoreView(holder)
-
             holder.card.setOnClickListener {
                 items[holder.adapterPosition].open = !items[holder.adapterPosition].open
                 setMoreView(holder)
@@ -42,7 +41,6 @@ class SensorAdapter(private val layoutInflater: LayoutInflater, private val item
         holder.more.text = items[holder.adapterPosition].more
         holder.image.setImageResource(items[holder.adapterPosition].image)
 
-        // Set Fragment
         val sensorFragment: Fragment?
         val fragmentManager: FragmentManager = (layoutInflater.context as MainActivity).supportFragmentManager
 

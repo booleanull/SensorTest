@@ -11,6 +11,7 @@ import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import com.boolenull.sensortest.R
+import com.boolenull.sensortest.model.EnumSensor
 import com.boolenull.sensortest.model.MySensor
 import com.boolenull.sensortest.model.getMySensor
 
@@ -25,13 +26,8 @@ class SensorRepository(val context: Context): ISensorRepository {
     }
 
     override fun getSensors(): List<MySensor> {
-        return listOf()
-    }
-
-    fun getDefaultSensors(sensorManager: SensorManager, sensors: List<MySensor>): List<MySensor> {
-        val list = sensors.toMutableList()
+        val list = mutableListOf<MySensor>()
         var mySensor: MySensor
-
         for (sensor: Sensor in sensorManager.getSensorList(Sensor.TYPE_ALL)) {
             if (getMySensor(sensor.type) != null) {
                 mySensor = getMySensor(sensor.type)!!
@@ -39,13 +35,23 @@ class SensorRepository(val context: Context): ISensorRepository {
                 list.add(mySensor)
             }
         }
-        return list
+
+        list.add(0, getWifiSensor())
+
+        val cameraSensor = getCameraSensor()
+        cameraSensor?.let {
+            list.add(1, it)
+        }
+
+        list.add(2, getFingerSensor())
+
+        return listOf()
     }
 
     private fun getWifiSensor(): MySensor {
-        val manager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        var wifiState: String = ""
-        var wifiName: String = ""
+        val manager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        var wifiState = ""
+        var wifiName = ""
         if (manager.isWifiEnabled) {
             val wifiInfo = manager.connectionInfo
             if (wifiInfo != null) {
@@ -63,7 +69,7 @@ class SensorRepository(val context: Context): ISensorRepository {
             wifiName = context.getString(R.string.wifinameindef)
         }
         return MySensor(
-                1000,
+                EnumSensor.WIFI.id,
                 context.getString(R.string.wifi),
                 wifiState,
                 wifiName,
@@ -80,7 +86,7 @@ class SensorRepository(val context: Context): ISensorRepository {
                 ?: return null
 
         return MySensor(
-                1001,
+                EnumSensor.PHOTO.id,
                 context.getString(R.string.camera),
                 context.getString(R.string.front, getPixelCamera(cameraManager, cameraFront)),
                 context.getString(R.string.back, getPixelCamera(cameraManager, cameraBack)),
@@ -134,7 +140,7 @@ class SensorRepository(val context: Context): ISensorRepository {
             finger = context.getString(R.string.fingernotactive)
         }
         return MySensor(
-                1002,
+                EnumSensor.FINGER.id,
                 context.getString(R.string.finger),
                 context.getString(R.string.fingerdescription, fingerActive),
                 context.getString(R.string.fingerstate, finger),
