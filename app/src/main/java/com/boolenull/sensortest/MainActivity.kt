@@ -15,14 +15,14 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import com.boolenull.sensortest.adapter.SensorAdapter
-import com.boolenull.sensortest.data.MySensor
-import com.boolenull.sensortest.data.getMySensor
+import com.boolenull.sensortest.model.MySensor
+import com.boolenull.sensortest.model.getDefaultSensors
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     var anotherSize = 2
-    val sensors = mutableListOf<MySensor>()
+    private val sensors = listOf<MySensor>()
     lateinit var sensorManager: SensorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
         // Get Sensors List and Refactor to Data Class
-        getDefaultSensors()
+        getDefaultSensors(sensorManager, sensors)
 
         // Set Another Sensors
         // Wifi
@@ -122,17 +122,6 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             sensors.add(0, MySensor(1000, getString(R.string.wifi), getString(R.string.wifioff), getString(R.string.wifinameindef), R.drawable.ic_network_wifi_black_24dp, false))
-        }
-    }
-
-    private fun getDefaultSensors() {
-        var mySensor: MySensor
-        for (sensor: Sensor in sensorManager.getSensorList(Sensor.TYPE_ALL)) {
-            if (getMySensor(sensor.type) != null) {
-                mySensor = getMySensor(sensor.type)!!
-                mySensor.text = sensor.name
-                sensors.add(mySensor)
-            }
         }
     }
 }

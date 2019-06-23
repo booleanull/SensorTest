@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.boolenull.sensortest.MainActivity
 import com.boolenull.sensortest.R
-import com.boolenull.sensortest.data.MySensor
+import com.boolenull.sensortest.model.MySensor
 import com.boolenull.sensortest.fragment.*
 import kotlinx.android.synthetic.main.layout_sensor.view.*
 
