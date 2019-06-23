@@ -1,4 +1,4 @@
-package com.boolenull.sensortest.fragment
+package com.boolenull.sensortest.ui.fragment
 
 import android.content.Context
 import android.graphics.Color
@@ -17,7 +17,7 @@ import com.jjoe64.graphview.series.LineGraphSeries
 import kotlinx.android.synthetic.main.fragment_acceler.*
 import kotlinx.android.synthetic.main.fragment_acceler.view.*
 
-class MagneticFragment : Fragment(), SensorEventListener {
+class AccelerFragment : Fragment(), SensorEventListener {
 
     val max = 100
 
@@ -28,10 +28,10 @@ class MagneticFragment : Fragment(), SensorEventListener {
     var pointz = mutableListOf<DataPoint>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater.inflate(R.layout.fragment_rotation, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_acceler, container, false)
 
         sensorManager = inflater.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
         return view
     }
@@ -63,6 +63,30 @@ class MagneticFragment : Fragment(), SensorEventListener {
         view!!.tvX.text = getString(R.string.X) + " " + event!!.values[0]
         view!!.tvY.text = getString(R.string.Y) + " " + event!!.values[1]
         view!!.tvZ.text = getString(R.string.Z) + " " + event!!.values[2]
+
+        if (event!!.values[0].toInt() == 0) {
+            view!!.tvXD.text = getString(R.string.accecenter)
+        } else if (event.values[0] < 0) {
+            view!!.tvXD.text = getString(R.string.acceright)
+        } else {
+            view!!.tvXD.text = getString(R.string.acceleft)
+        }
+
+        if (event!!.values[1].toInt() == 0) {
+            view!!.tvYD.text = getString(R.string.accecenter)
+        } else if (event.values[1] < 0) {
+            view!!.tvYD.text = getString(R.string.acceydown)
+        } else {
+            view!!.tvYD.text = getString(R.string.acceyup)
+        }
+
+        if (event!!.values[2].toInt() == 0) {
+            view!!.tvZD.text = getString(R.string.accecenter)
+        } else if (event.values[2] < 0) {
+            view!!.tvZD.text = getString(R.string.accezup)
+        } else {
+            view!!.tvZD.text = getString(R.string.accezdown)
+        }
 
         //val df = DecimalFormat("#.###")
         //df.roundingMode = RoundingMode.CEILING

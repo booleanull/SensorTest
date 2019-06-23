@@ -1,4 +1,4 @@
-package com.boolenull.sensortest.fragment
+package com.boolenull.sensortest.ui.fragment
 
 import android.content.Context
 import android.graphics.Color
@@ -17,7 +17,7 @@ import com.jjoe64.graphview.series.LineGraphSeries
 import kotlinx.android.synthetic.main.fragment_acceler.*
 import kotlinx.android.synthetic.main.fragment_acceler.view.*
 
-class RotationFragment : Fragment(), SensorEventListener {
+class MagneticFragment : Fragment(), SensorEventListener {
 
     val max = 100
 
@@ -31,7 +31,7 @@ class RotationFragment : Fragment(), SensorEventListener {
         val view: View = inflater.inflate(R.layout.fragment_rotation, container, false)
 
         sensorManager = inflater.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
         return view
     }

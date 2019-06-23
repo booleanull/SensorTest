@@ -8,13 +8,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.boolenull.sensortest.MainActivity
+import com.boolenull.sensortest.ui.MainActivity
 import com.boolenull.sensortest.R
 import com.boolenull.sensortest.model.MySensor
-import com.boolenull.sensortest.fragment.*
+import com.boolenull.sensortest.ui.fragment.*
 import kotlinx.android.synthetic.main.layout_sensor.view.*
 
-class SensorAdapter(val layoutInflater: LayoutInflater, private val items: MutableList<MySensor>) :
+class SensorAdapter(private val layoutInflater: LayoutInflater, private val items: List<MySensor>) :
         RecyclerView.Adapter<SensorAdapter.SensorHolder>() {
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): SensorHolder {

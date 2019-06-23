@@ -1,4 +1,4 @@
-package com.boolenull.sensortest.fragment
+package com.boolenull.sensortest.ui.fragment
 
 import android.content.Context
 import android.hardware.Sensor

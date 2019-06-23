@@ -10,7 +10,7 @@ data class MySensor(
     var text: String,
     val more: String,
     val image: Int,
-    var open: Boolean
+    var open: Boolean = false
 )
 
 fun getMySensor(id: Int): MySensor? {
@@ -20,95 +20,71 @@ fun getMySensor(id: Int): MySensor? {
             "Акселерометр",
             "",
             "Датчик ускорения для трех осей измерения",
-            R.drawable.ic_toll_black_24dp,
-            false
+            R.drawable.ic_toll_black_24dp
         )
         Sensor.TYPE_AMBIENT_TEMPERATURE -> return MySensor(
             Sensor.TYPE_AMBIENT_TEMPERATURE,
             "Температура",
             "",
             "Датчик температуры окружающей среды",
-            R.drawable.ic_whatshot_black_24dp,
-            false
+            R.drawable.ic_whatshot_black_24dp
         )
         Sensor.TYPE_GRAVITY -> return MySensor(
             Sensor.TYPE_GRAVITY,
             "Гравитация",
             "",
             "Датчик гравитации",
-            R.drawable.ic_arrow_downward_black_24dp,
-            false
+            R.drawable.ic_arrow_downward_black_24dp
         )
         Sensor.TYPE_GYROSCOPE -> return MySensor(
             Sensor.TYPE_GYROSCOPE,
             "Гироскоп",
             "",
             "Датчик скорости вращения корпуса мобильного телефона",
-            R.drawable.ic_my_location_black_24dp,
-            false
+            R.drawable.ic_my_location_black_24dp
         )
         Sensor.TYPE_LIGHT -> return MySensor(
             Sensor.TYPE_LIGHT,
             "Освещенность",
             "",
             "Датчик освещенности",
-            R.drawable.ic_lightbulb_outline_black_24dp,
-            false
+            R.drawable.ic_lightbulb_outline_black_24dp
         )
         Sensor.TYPE_MAGNETIC_FIELD -> return MySensor(
             Sensor.TYPE_MAGNETIC_FIELD,
             "Магнитное поле",
             "",
             "Датчик магнитного поля",
-            R.drawable.ic_explore_black_24dp,
-            false
+            R.drawable.ic_explore_black_24dp
         )
         Sensor.TYPE_PRESSURE -> return MySensor(
             Sensor.TYPE_PRESSURE,
             "Давление",
             "",
             "Датчик давления ",
-            R.drawable.ic_av_timer_black_24dp,
-            false
+            R.drawable.ic_av_timer_black_24dp
         )
         Sensor.TYPE_PROXIMITY -> return MySensor(
             Sensor.TYPE_PROXIMITY,
             "Расстояние до объекта",
             "",
             "Датчик для определения расстояния до объекта",
-            R.drawable.ic_person_pin_circle_black_24dp,
-            false
+            R.drawable.ic_person_pin_circle_black_24dp
         )
         Sensor.TYPE_RELATIVE_HUMIDITY -> return MySensor(
             Sensor.TYPE_RELATIVE_HUMIDITY,
             "Относительная влажность",
             "",
             "Датчик относительной влажности",
-            R.drawable.ic_wb_cloudy_black_24dp,
-            false
+            R.drawable.ic_wb_cloudy_black_24dp
         )
         Sensor.TYPE_ROTATION_VECTOR -> return MySensor(
             Sensor.TYPE_ROTATION_VECTOR,
             "Ротация",
             "",
             "Датчик ориентации в виде угла поворота и оси",
-            R.drawable.ic_3d_rotation_black_24dp,
-            false
+            R.drawable.ic_3d_rotation_black_24dp
         )
         else -> return null
     }
-}
-
-fun getDefaultSensors(sensorManager: SensorManager, sensors: List<MySensor>): List<MySensor> {
-    val list = sensors.toMutableList()
-    var mySensor: MySensor
-
-    for (sensor: Sensor in sensorManager.getSensorList(Sensor.TYPE_ALL)) {
-        if (getMySensor(sensor.type) != null) {
-            mySensor = getMySensor(sensor.type)!!
-            mySensor.text = sensor.name
-            list.add(mySensor)
-        }
-    }
-    return list
 }

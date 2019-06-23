@@ -1,4 +1,4 @@
-package com.boolenull.sensortest.fragment
+package com.boolenull.sensortest.ui.fragment
 
 import android.content.Context
 import android.hardware.Sensor
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_light.*
 import kotlinx.android.synthetic.main.fragment_light.view.*
 
 
-class HumidityFragment : Fragment(), SensorEventListener {
+class LightFragment : Fragment(), SensorEventListener {
 
     val max = 100
 
@@ -29,7 +29,7 @@ class HumidityFragment : Fragment(), SensorEventListener {
         val view: View = inflater.inflate(R.layout.fragment_light, container, false)
 
         sensorManager = inflater.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY)
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
         return view
     }
 
@@ -48,7 +48,7 @@ class HumidityFragment : Fragment(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (points.size > max) points.clear()
-        view!!.tv.text = getString(R.string.humi) + " " + event!!.values[0]
+        view!!.tv.text = getString(R.string.light) + " " + event!!.values[0]
         points.add(DataPoint(points.size.toDouble(), event.values[0].toDouble()))
         val series = LineGraphSeries<DataPoint>(points.toTypedArray())
         graph.removeAllSeries()
