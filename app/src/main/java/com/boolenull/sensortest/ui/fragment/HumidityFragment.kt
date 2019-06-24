@@ -1,4 +1,4 @@
-package com.boolenull.sensortest.fragment
+package com.boolenull.sensortest.ui.fragment
 
 import android.content.Context
 import android.hardware.Sensor
@@ -11,15 +11,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.boolenull.sensortest.R
+import com.boolenull.sensortest.utils.MySensorEventListener
+import com.boolenull.sensortest.utils.maxPoint
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import kotlinx.android.synthetic.main.fragment_light.*
 import kotlinx.android.synthetic.main.fragment_light.view.*
 
 
-class TempFragment : Fragment(), SensorEventListener {
-
-    val max = 100
+class HumidityFragment: Fragment(), MySensorEventListener {
 
     lateinit var sensorManager: SensorManager
     var sensor: Sensor? = null
@@ -29,7 +29,7 @@ class TempFragment : Fragment(), SensorEventListener {
         val view: View = inflater.inflate(R.layout.fragment_light, container, false)
 
         sensorManager = inflater.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY)
         return view
     }
 
@@ -47,14 +47,13 @@ class TempFragment : Fragment(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        if (points.size > max) points.clear()
-        view!!.tv.text = getString(R.string.temp) + " " + event!!.values[0]
-        points.add(DataPoint(points.size.toDouble(), event.values[0].toDouble()))
-        val series = LineGraphSeries<DataPoint>(points.toTypedArray())
-        graph.removeAllSeries()
-        graph.addSeries(series)
-    }
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        if (points.size > maxPoint) points.clear()
+        event?.let {
+            view!!.tv.text = getString(R.string.humi, it.values[0])
+            points.add(DataPoint(points.size.toDouble(), it.values[0].toDouble()))
+            val series = LineGraphSeries<DataPoint>(points.toTypedArray())
+            graph.removeAllSeries()
+            graph.addSeries(series)
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.boolenull.sensortest.fragment
+package com.boolenull.sensortest.ui.fragment
 
 import android.content.Context
 import android.hardware.Sensor
@@ -11,25 +11,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.boolenull.sensortest.R
+import com.boolenull.sensortest.utils.MySensorEventListener
+import com.boolenull.sensortest.utils.maxPoint
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
-import kotlinx.android.synthetic.main.fragment_acceler.*
+import kotlinx.android.synthetic.main.fragment_light.*
 import kotlinx.android.synthetic.main.fragment_light.view.*
 
-class ProxityFragment : Fragment(), SensorEventListener {
-
-    val max = 100
+class LightFragment: Fragment(), MySensorEventListener {
 
     lateinit var sensorManager: SensorManager
     var sensor: Sensor? = null
-    var point = mutableListOf<DataPoint>()
+    var points = mutableListOf<DataPoint>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_light, container, false)
 
         sensorManager = inflater.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
-
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
         return view
     }
 
@@ -37,7 +36,7 @@ class ProxityFragment : Fragment(), SensorEventListener {
         super.onStart()
 
         if (sensor != null) {
-            sensorManager.registerListener((this as SensorEventListener), sensor, 10000000)
+            sensorManager.registerListener((this as SensorEventListener), sensor, 3000)
         }
     }
 
@@ -46,21 +45,14 @@ class ProxityFragment : Fragment(), SensorEventListener {
         sensorManager.unregisterListener(this)
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-    }
-
     override fun onSensorChanged(event: SensorEvent?) {
-        if (point.size > max) {
-            point.clear()
+        if (points.size > maxPoint) points.clear()
+        event?.let {
+            view!!.tv.text = getString(R.string.light, it.values[0])
+            points.add(DataPoint(points.size.toDouble(), it.values[0].toDouble()))
+            val series = LineGraphSeries<DataPoint>(points.toTypedArray())
+            graph.removeAllSeries()
+            graph.addSeries(series)
         }
-
-        view!!.tv.text = getString(R.string.proxity) + " " + event!!.values[0]
-
-        point.add(DataPoint(point.size.toDouble(), event.values[0].toDouble()))
-        val series = LineGraphSeries<DataPoint>(point.toTypedArray())
-
-        graph.removeAllSeries()
-        graph.addSeries(series)
     }
 }

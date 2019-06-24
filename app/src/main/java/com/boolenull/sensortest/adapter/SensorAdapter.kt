@@ -8,14 +8,14 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.boolenull.sensortest.MainActivity
 import com.boolenull.sensortest.R
-import com.boolenull.sensortest.data.MySensor
-import com.boolenull.sensortest.fragment.*
+import com.boolenull.sensortest.model.EnumMySensor
+import com.boolenull.sensortest.model.MySensor
+import com.boolenull.sensortest.ui.MainActivity
+import com.boolenull.sensortest.ui.fragment.*
 import kotlinx.android.synthetic.main.layout_sensor.view.*
 
-class SensorAdapter(val layoutInflater: LayoutInflater, private val items: MutableList<MySensor>) :
-        RecyclerView.Adapter<SensorAdapter.SensorHolder>() {
+class SensorAdapter(private val layoutInflater: LayoutInflater, private val items: List<MySensor>): RecyclerView.Adapter<SensorAdapter.SensorHolder>() {
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): SensorHolder {
         val view: View = layoutInflater.inflate(R.layout.layout_sensor, p0, false)
@@ -23,14 +23,12 @@ class SensorAdapter(val layoutInflater: LayoutInflater, private val items: Mutab
     }
 
     override fun onBindViewHolder(holder: SensorHolder, p1: Int) {
-        if (items[holder.adapterPosition].id in 1000..1002) {
+        if (items[holder.adapterPosition].id in EnumMySensor.values().map { it.id }) {
             holder.more.textSize = 14F
             holder.more.setTextColor(ContextCompat.getColor(layoutInflater.context, R.color.colorBlack))
             holder.card.foreground = null
         } else {
-            // More
             setMoreView(holder)
-
             holder.card.setOnClickListener {
                 items[holder.adapterPosition].open = !items[holder.adapterPosition].open
                 setMoreView(holder)
@@ -42,7 +40,6 @@ class SensorAdapter(val layoutInflater: LayoutInflater, private val items: Mutab
         holder.more.text = items[holder.adapterPosition].more
         holder.image.setImageResource(items[holder.adapterPosition].image)
 
-        // Set Fragment
         val sensorFragment: Fragment?
         val fragmentManager: FragmentManager = (layoutInflater.context as MainActivity).supportFragmentManager
 
@@ -53,7 +50,7 @@ class SensorAdapter(val layoutInflater: LayoutInflater, private val items: Mutab
         }
 
         val newContainerId = 111 + (Math.random() * 9999).toInt()
-        holder.container.setId(newContainerId)
+        holder.container.id = newContainerId
 
         when (items[holder.adapterPosition].id) {
             Sensor.TYPE_LIGHT -> sensorFragment = LightFragment()
@@ -68,8 +65,7 @@ class SensorAdapter(val layoutInflater: LayoutInflater, private val items: Mutab
             else -> sensorFragment = null
         }
 
-        if (sensorFragment != null)
-            fragmentManager.beginTransaction().replace(newContainerId, sensorFragment).commit()
+        if (sensorFragment != null) fragmentManager.beginTransaction().replace(newContainerId, sensorFragment).commit()
     }
 
     private fun setMoreView(holder: SensorHolder) {
@@ -86,7 +82,7 @@ class SensorAdapter(val layoutInflater: LayoutInflater, private val items: Mutab
         return items.size
     }
 
-    class SensorHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class SensorHolder(view: View): RecyclerView.ViewHolder(view) {
         val title = view.tvTitle
         val text = view.tvText
         val more = view.tvMore
