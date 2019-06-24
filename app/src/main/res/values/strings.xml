@@ -7,9 +7,9 @@
     <string name="X">Координата X: %1$d</string>
     <string name="Y">Координата Y: %1$d</string>
     <string name="Z">Координата Z: %1$d</string>
-    <string name="proxity">Расстояние:</string>
-    <string name="humi">Влажность:</string>
-    <string name="temp">Температура:</string>
+    <string name="proxity">Расстояние: %1$d</string>
+    <string name="humi">Влажность: %1$df</string>
+    <string name="temp">Температура: %1$d</string>
     <string name="accecenter">Устройство находится по центру</string>
     <string name="acceright">Устройство отклонено вправо</string>
     <string name="acceleft">Устройство отклонено влево</string>

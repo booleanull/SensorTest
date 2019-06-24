@@ -51,12 +51,14 @@ class ProxityFragment: Fragment(), MySensorEventListener {
             point.clear()
         }
 
-        view!!.tv.text = getString(R.string.proxity) + " " + event!!.values[0]
+        event?.let {
+            view!!.tv.text = getString(R.string.proxity, it.values[0])
 
-        point.add(DataPoint(point.size.toDouble(), event.values[0].toDouble()))
-        val series = LineGraphSeries<DataPoint>(point.toTypedArray())
+            point.add(DataPoint(point.size.toDouble(), it.values[0].toDouble()))
+            val series = LineGraphSeries<DataPoint>(point.toTypedArray())
 
-        graph.removeAllSeries()
-        graph.addSeries(series)
+            graph.removeAllSeries()
+            graph.addSeries(series)
+        }
     }
 }

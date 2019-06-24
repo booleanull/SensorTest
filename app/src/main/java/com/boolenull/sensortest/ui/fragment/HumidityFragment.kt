@@ -48,10 +48,12 @@ class HumidityFragment: Fragment(), MySensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (points.size > maxPoint) points.clear()
-        view!!.tv.text = getString(R.string.humi) + " " + event!!.values[0]
-        points.add(DataPoint(points.size.toDouble(), event.values[0].toDouble()))
-        val series = LineGraphSeries<DataPoint>(points.toTypedArray())
-        graph.removeAllSeries()
-        graph.addSeries(series)
+        event?.let {
+            view!!.tv.text = getString(R.string.humi, it.values[0])
+            points.add(DataPoint(points.size.toDouble(), it.values[0].toDouble()))
+            val series = LineGraphSeries<DataPoint>(points.toTypedArray())
+            graph.removeAllSeries()
+            graph.addSeries(series)
+        }
     }
 }

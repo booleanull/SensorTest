@@ -50,7 +50,7 @@ class SensorAdapter(private val layoutInflater: LayoutInflater, private val item
         }
 
         val newContainerId = 111 + (Math.random() * 9999).toInt()
-        holder.container.setId(newContainerId)
+        holder.container.id = newContainerId
 
         when (items[holder.adapterPosition].id) {
             Sensor.TYPE_LIGHT -> sensorFragment = LightFragment()

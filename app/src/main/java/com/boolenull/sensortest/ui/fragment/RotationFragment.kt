@@ -56,35 +56,34 @@ class RotationFragment: Fragment(), MySensorEventListener {
             pointz.clear()
         }
 
-        view!!.tvX.text = getString(R.string.X) + " " + event!!.values[0]
-        view!!.tvY.text = getString(R.string.Y) + " " + event!!.values[1]
-        view!!.tvZ.text = getString(R.string.Z) + " " + event!!.values[2]
+        event?.let {
+            view!!.tvX.text = getString(R.string.X, it.values[0])
+            view!!.tvY.text = getString(R.string.Y, it.values[1])
+            view!!.tvZ.text = getString(R.string.Z, it.values[2])
 
-        //val df = DecimalFormat("#.###")
-        //df.roundingMode = RoundingMode.CEILING
+            pointx.add(DataPoint(pointx.size.toDouble(), it.values[0].toDouble()))
+            pointy.add(DataPoint(pointy.size.toDouble(), it.values[1].toDouble()))
+            pointz.add(DataPoint(pointz.size.toDouble(), it.values[2].toDouble()))
 
-        pointx.add(DataPoint(pointx.size.toDouble(), event.values[0].toDouble()))
-        pointy.add(DataPoint(pointy.size.toDouble(), event.values[1].toDouble()))
-        pointz.add(DataPoint(pointz.size.toDouble(), event.values[2].toDouble()))
+            val seriesx = LineGraphSeries<DataPoint>(pointx.toTypedArray())
+            val seriesy = LineGraphSeries<DataPoint>(pointy.toTypedArray())
+            val seriesz = LineGraphSeries<DataPoint>(pointz.toTypedArray())
 
-        val seriesx = LineGraphSeries<DataPoint>(pointx.toTypedArray())
-        val seriesy = LineGraphSeries<DataPoint>(pointy.toTypedArray())
-        val seriesz = LineGraphSeries<DataPoint>(pointz.toTypedArray())
+            graph.removeAllSeries()
 
-        graph.removeAllSeries()
+            seriesx.color = Color.GREEN
+            seriesy.color = Color.RED
 
-        seriesx.color = Color.GREEN
-        seriesy.color = Color.RED
+            seriesx.title = "X"
+            seriesy.title = "Y"
+            seriesz.title = "Z"
 
-        seriesx.title = "X"
-        seriesy.title = "Y"
-        seriesz.title = "Z"
+            graph.legendRenderer.isVisible = true
+            graph.legendRenderer.textSize = 12f
 
-        graph.legendRenderer.isVisible = true
-        graph.legendRenderer.textSize = 12f
-
-        graph.addSeries(seriesx)
-        graph.addSeries(seriesy)
-        graph.addSeries(seriesz)
+            graph.addSeries(seriesx)
+            graph.addSeries(seriesy)
+            graph.addSeries(seriesz)
+        }
     }
 }

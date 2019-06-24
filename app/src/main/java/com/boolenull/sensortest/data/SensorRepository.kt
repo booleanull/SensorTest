@@ -12,11 +12,11 @@ import android.net.wifi.WifiManager
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.util.Size
 import com.boolenull.sensortest.R
-import com.boolenull.sensortest.model.EnumSensor
+import com.boolenull.sensortest.model.EnumMySensor
 import com.boolenull.sensortest.model.MySensor
 import com.boolenull.sensortest.model.getMySensor
 
-class SensorRepository(val context: Context): ISensorRepository {
+class SensorRepository(val context: Context) : ISensorRepository {
 
     val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
@@ -70,11 +70,11 @@ class SensorRepository(val context: Context): ISensorRepository {
             wifiName = context.getString(R.string.wifinameindef)
         }
         return MySensor(
-                EnumSensor.WIFI.id,
-                context.getString(R.string.wifi),
-                wifiState,
-                wifiName,
-                R.drawable.ic_network_wifi_black_24dp
+            EnumMySensor.WIFI.id,
+            context.getString(R.string.wifi),
+            wifiState,
+            wifiName,
+            R.drawable.ic_network_wifi_black_24dp
         )
     }
 
@@ -82,16 +82,16 @@ class SensorRepository(val context: Context): ISensorRepository {
         val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
 
         val cameraFront = getCameraId(cameraManager, false)
-                ?: return null
+            ?: return null
         val cameraBack = getCameraId(cameraManager, true)
-                ?: return null
+            ?: return null
 
         return MySensor(
-                EnumSensor.PHOTO.id,
-                context.getString(R.string.camera),
-                context.getString(R.string.front, getPixelCamera(cameraManager, cameraFront)),
-                context.getString(R.string.back, getPixelCamera(cameraManager, cameraBack)),
-                R.drawable.ic_camera_alt_black_24dp
+            EnumMySensor.PHOTO.id,
+            context.getString(R.string.camera),
+            context.getString(R.string.front, getPixelCamera(cameraManager, cameraFront)),
+            context.getString(R.string.back, getPixelCamera(cameraManager, cameraBack)),
+            R.drawable.ic_camera_alt_black_24dp
         )
     }
 
@@ -103,7 +103,7 @@ class SensorRepository(val context: Context): ISensorRepository {
             cameraId = i
             characteristics = cManager.getCameraCharacteristics(cameraId)
             camera = characteristics.get(CameraCharacteristics.LENS_FACING)
-                    ?: return null
+                ?: return null
             if (camera == CameraCharacteristics.LENS_FACING_FRONT && !type) {
                 return cameraId
             }
@@ -142,11 +142,11 @@ class SensorRepository(val context: Context): ISensorRepository {
             finger = context.getString(R.string.fingernotactive)
         }
         return MySensor(
-                EnumSensor.FINGER.id,
-                context.getString(R.string.finger),
-                context.getString(R.string.fingerdescription, fingerActive),
-                context.getString(R.string.fingerstate, finger),
-                R.drawable.ic_fingerprint_black_24dp
+            EnumMySensor.FINGER.id,
+            context.getString(R.string.finger),
+            context.getString(R.string.fingerdescription, fingerActive),
+            context.getString(R.string.fingerstate, finger),
+            R.drawable.ic_fingerprint_black_24dp
         )
     }
 }
